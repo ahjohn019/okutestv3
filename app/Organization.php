@@ -20,4 +20,7 @@ class Organization extends Model
         return $this->hasMany(Events::class);
     }
 
+    public function artist(){
+        return $this->belongsToMany('App\Artist');
+    }
 }

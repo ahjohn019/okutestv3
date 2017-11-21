@@ -13,6 +13,6 @@ class DatabaseSeeder extends Seeder
     {
          $this->call(HandicraftTableSeeder::class);
          $this->call(AdminTableSeeder::class);
-         
+         $this->call(OrgTableSeeder::class);
     }
 }

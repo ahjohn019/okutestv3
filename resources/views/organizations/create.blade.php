@@ -46,11 +46,19 @@
     {!! Form::label('Organization Image') !!}
     {!! Form::file('image', null) !!}
 </div>
+
+<div class="form-group">
+{{ Form::label('artists', 'Artists:') }}
+    <select class="form-control select2-multi" name="artists[]" multiple="multiple">
+	@foreach($artists as $art)
+	<option value='{{ $art->id }}'>{{ $art->Name }}</option>
+	@endforeach
+     </select>
+</div>
+
 <div class="form-group"> 
 {{ Form::submit('Submit', array('class' => 'btn btn-primary')) }}
 </div>
 {{ Form::close() }}
-
-
 
 @endsection

@@ -20,44 +20,62 @@ OKU Shopping Cart
 <div class="container">
       <!-- Example row of columns -->
      <section>
-       <div class="page-header" id="features">
+      <div class="page-header" id="features">
          <h2>Features</h2>
        </div>
-      <div class="row">
-        <div class="col-lg-4">
-          <blockquote>
-          <h2>Numerous of choice</h2>
-          <p>With OKU Marketplace, there is hundred of items give you choose. We ensure that each of the items are genuinue and high quality levels. </p>
-         
-          </blockquote>
-        </div>
-        <div class="col-lg-4">
-          <blockquote>
-          <h2>Cheaper Handicraft Let You Choose</h2>
-          <p>Each of the items are cheaper than you think. Our handicraft is came from disabled organizations and you will be not dissapointed as all of the items are really lower prices.</p>
+        <div class="col-sm-8">
+            <div class="row marketing">
+                <div class="col-lg-6" >
+                    <img src="../image/select_oku.png" class="center" alt="Avatar" style="width:100px">
+                    <h2>Multiple Choice</h2>
+                    <p>With OKU Marketplace, there is hundred of items give you choose. We ensure that each of the items are genuinue and high quality levels.</p>
+                </div>  
+                <div class="col-lg-6" >  
+                    <img src="../image/craft_oku.png" class="center" alt="Avatar" style="width:100px">
+                    <h2>Handicraft</h2>
+                    <p>Each of the items are cheaper than you think. Our handicraft is came from disabled organizations and you will be not dissapointed as all of the items are really lower prices.</p>
+                </div>
+                <div class="col-lg-6">
+                <img src="../image/talent_oku.png" class="center" alt="Avatar" style="width:100px">
+                    <h2>Artist & Services</h2>
+                    <p>Besides sell products, we offer a new type of services. This services included massage services, repair equipment and more. Most important is , there are no GST included and is affordable prices.</p>
+                </div>
+                <div class="col-lg-6">
+                <img src="../image/event_oku.png" class="center" alt="Avatar" style="width:100px">
+                    <h2>Events </h2>
+                    <p>We will held the events each of one month, come and participate in our events to enjoy the lowest prices
+                    of genuinue products thats originally made from disabled people.
+                    </p>
+           
+                </div>
+              </div><!--end of col-lg-6 --> 
           
-          </blockquote>
-       </div>
-        <div class="col-lg-4">
-          <blockquote>
-          <h2>Talented Artist Services Included</h2>
-          <p>Besides sell products, we offer a new type of services. This services included massage services, repair equipment and more. Most important is , there are no GST included and is affordable prices.</p>
+          </div><!--end of row marketing -->
           
-          </blockquote>
-        </div>
-        <div class="col-lg-4">
-          <blockquote>
-          <h2>Events </h2>
-          <p>We will held the events each of one month, come and participate in our events to enjoy the lowest prices
-            of genuinue products thats originally made from disabled people.
-          </p>
-          
-          </blockquote>
-        </div>
-      </div>
-      </div>
-     
+         <div class="col-sm-4">
+         <h2>Upcoming events</h2>
+         @foreach($events as $event)
+         <div class="panel-group">
+         <div class="panel panel-info">
+               <div class="panel-heading">{{$event->name}}</div>
+               <div class="panel-body">
+               <p>
+               <strong>Description:</strong>{{$event->desc}}<br>
+               <strong>Start Date:</strong>{{$event->start_date}}<br>
+               <strong>End Date:</strong>{{$event->end_date}}<br>
+               <strong>Type:</strong>{{$event->type}}<br>
+               <strong>Organization Name:</strong>{{$event->organization['name']}}<br>
+               </div>
+               </p>
+             </div>
+         </div>
+         @endforeach
+         {{$events->links()}}
+      </div><!--end of col-sm-8-->
+ </div><!--end of container -->    
+ 
      </section>
+   
       <hr>
 
 <!-- Slideshow product -->
@@ -68,6 +86,7 @@ OKU Shopping Cart
     </div>
     </div>
     </section>
+   
     <!-- #region Jssor Slider Begin -->
     <script src="js/jssor.slider-24.1.5.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/slideshow.js"></script>
@@ -99,7 +118,18 @@ OKU Shopping Cart
     </div>
     <script type="text/javascript">jssor_1_slider_init();</script>
     <!-- #endregion Jssor Slider End -->
-   
+
+<!--<div class="container">
+<h2>Upcoming events</h2>
+@foreach($events as $event)
+<div class="panel-group">
+<div class="panel panel-info">
+      <div class="panel-heading">Events</div>
+      <div class="panel-body"><strong>Events Name:</strong>{{$event->name}}</div>
+    </div>
+</div>
+@endforeach
+</div> -->
 
 <!-- call to action -->
 <section>
@@ -122,7 +152,5 @@ OKU Shopping Cart
      </form>
 </div>
 </section>
-
-  
 
 @endsection

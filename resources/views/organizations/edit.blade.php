@@ -48,6 +48,10 @@
     {!! Form::file('image', null) !!}
 </div>
 <div class="form-group">
+{{ Form::label('artists', 'Artist:', ['class' => 'form-spacing-top']) }}
+{{ Form::select('artists[]', $artists, null, ['class' => 'form-control select2-multi', 'multiple' => 'multiple']) }}
+</div>
+<div class="form-group">
         {{ Form::submit('Edit', array('class' => 'btn btn-primary')) }}
 </div>
 {{ Form::close() }}

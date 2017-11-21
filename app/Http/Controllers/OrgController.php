@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use App\Organization;
+use App\Artist;
+use App\Store;
 use Session;
 use Auth;
 use Image;
@@ -18,7 +20,7 @@ class OrgController extends Controller
 {
     public function __construct()
     {
-         $this->middleware('auth:admin');        
+         $this->middleware('auth:admin');
     }
     /**
      * Display a listing of the resource.
@@ -32,10 +34,10 @@ class OrgController extends Controller
         $organizations = Organization::latest()
         ->search($s)
         ->paginate(4);
-        
+
         return view('organizations.index', compact('organizations','s')); //
      }
- 
+
      /**
       * Show the form for creating a new resource.
       *
@@ -43,11 +45,12 @@ class OrgController extends Controller
       */
      public function createOrganization()
      {
-        
+
         // load the create form (app/views/organizations/create.blade.php)
-        return View('organizations.create'); //
+        $artists=Artist::all();
+        return View('organizations.create')->withArtists($artists); //
      }
- 
+
      /**
       * Store a newly created resource in storage.
       *
@@ -55,6 +58,7 @@ class OrgController extends Controller
       */
      public function store(Request $request)
      {
+
          //validate
          $rules = array(
              'name' => 'required|max:30',
@@ -86,19 +90,19 @@ class OrgController extends Controller
            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $filename = time().'.'.$image->getClientOriginalExtension();
-                $location = public_path('images/'.$filename); 
+                $location = public_path('images/'.$filename);
                 Image::make($image)->resize(200,150)->save($location);
                 $organizations->image=$filename;
            }
            $organizations->save();
-
+           $organizations->artist()->sync($request->artists,false);
          // redirect
          Session::flash('message', 'Successfully created organizations');
          return Redirect::to('org');
          }
      }
-     
- 
+
+
      /**
       * Display the specified resource.
       *
@@ -107,15 +111,16 @@ class OrgController extends Controller
       */
      public function show($id)
      {
-         
+
          //get the org
          $organizations = Organization::find($id);
+         $stores = Store::all()->where('orgID', '=',  $id)->where('status','=','Active');
 
          //show the view and pass the org to it
-         return view('organizations.show', ['organizations'=> $organizations]);
-         
+         return view('organizations.show', ['organizations'=> $organizations])->with('stores',$stores);
+
      }
- 
+
      /**
       * Show the form for editing the specified resource.
       *
@@ -127,12 +132,17 @@ class OrgController extends Controller
          //get the organizations
          $organizations = Organization::find($id);
 
+         $artists = Artist::all();
+         $artists2 = array();
+         foreach ($artists as $art) {
+             $artists2[$art->id] = $art->Name;
+         }
          //show the edit form and pass the org to it
-         return view('organizations.edit', ['organizations'=> $organizations]);
-         
+         return view('organizations.edit')->withOrganizations($organizations)->withArtists($artists2);
+
 
      }
- 
+
      /**
       * Update the specified resource in storage.
       *
@@ -169,12 +179,20 @@ class OrgController extends Controller
            //authenticate
            $organizations->admin_id = auth()->user()->id;
            $organizations->save();
-         
+
+           if(isset($request->artists)){
+            $organizations->artist()->sync($request->artists);
+           }
+           else
+           {
+            $organizations->artist()->sync(array());
+           }
+
             //store image
             if($request->hasFile('image')){
                 $image = $request->file('image');
                 $filename = time().'.'.$image->getClientOriginalExtension();
-                $location = public_path('images/'.$filename); 
+                $location = public_path('images/'.$filename);
                 Image::make($image)->resize(200,150)->save($location);
                 $organizations->image = $filename;
                 $organizations->update(Input::all());
@@ -185,7 +203,7 @@ class OrgController extends Controller
          return Redirect::to('org');
          }
      }
- 
+
      /**
       * Remove the specified resource from storage.
       *
@@ -196,11 +214,14 @@ class OrgController extends Controller
      {
          // delete
         $organizations = Organization::find($id);
-       
+
         $organizations->delete();
 
         // redirect
         Session::flash('message', 'Successfully deleted organizations');
         return Redirect::to('org');
+     }
+     public function addNewStore($organizationID){
+       return view('stores.create')->with('organizationID',$organizationID);
      }
 }

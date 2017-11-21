@@ -26,6 +26,7 @@
             <strong>End Date:</strong> {{ $events->end_date}}<br>
             <strong>Place:</strong> {{ $events->place}}<br>
             <strong>Type:</strong> {{ $events->type}}<br>
+            <strong>Organization Name:</strong>{{$events->organization['name']}}<br>
         </p>
 </div>
 @endsection

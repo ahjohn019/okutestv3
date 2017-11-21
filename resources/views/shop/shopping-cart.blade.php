@@ -43,6 +43,8 @@
             <h2>No Items In Cart!</h2>
         </div>
 </div>
+                <button><a href="{{ url('/payment')}}">Checkout</a></button>
+
 </div>
 @endif
 @endsection

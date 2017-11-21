@@ -3,7 +3,7 @@
 @section('content')
 
  <div class="row">
-    
+
     <div class="col-md-4 col-md-offset-4">
         <h1>Sign Up</h1>
         @if(count($errors) > 0)
@@ -13,7 +13,7 @@
             @endforeach
         </div>
         @endif
-        
+
         <form action="{{route('user.signup')}}" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -27,7 +27,7 @@
                 <label for ="password">Password</label>
                 <input type="password" id="password" name="password" class="form-control">
               </div>
-            
+
             <button type="submit" class="btn-btn primary">Sign Up</button>
             {{  csrf_field()  }}
         </form>

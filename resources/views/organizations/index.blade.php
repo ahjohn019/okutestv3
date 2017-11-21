@@ -15,7 +15,7 @@
     <a style="font-size:30px;cursor:pointer" onclick="openNav()">
         <img src="{{URL::to('image/sidemenu.png')}}" alt="sidemenu">
     </a></span></h2>
-    
+
 </div>
 
 <div id="mySidenav" class="sidenav">
@@ -51,13 +51,14 @@
       <th>Phone Number</th>
       <th>Register Date</th>
       <th>Image</th>
+      <th>Action</th>
     </tr>
   </thead>
-  
+
   <tbody>
-  
+
   @foreach($organizations as $org)
-  
+
     <tr>
       <th scope="row">{{$org->id}}</th>
       <td class="bg-info">{{$org->name}}</td>
@@ -68,22 +69,22 @@
       <td class="bg-info">{{$org->reg_date}}</td>
       <td><img class ="myImg" src="{{asset('images/'.$org->image)}}" height="150" weight="200" ></td>
       <!-- delete the nerd (uses the destroy method DESTROY /nerds/{id} -->
-      
+
       <!-- show the nerd (uses the show method found at GET /nerds/{id} -->
       <td><a href="{{URL::to('org/show/' . $org->id)}}" class="btn btn-small btn-success" >View</a></td>
       <!-- edit this nerd (uses the edit method found at GET /nerds/{id}/edit -->
       @if(Auth::user()->id == $org->admin_id).<!-- authenticate user id for permission to delete -->
       <td><a href="{{URL::to('org/edit/' .$org->id)}}" class="btn btn-small btn-info" >Update</a></td>
        <!-- delete the nerd (uses the destroy method DESTROY /nerds/{id} -->
-      
-      <td> 
+
+      <td>
       {!! Form::open(['method' => 'DELETE','route' => ['org.delete', $org->id]]) !!}
       <div class="form-group">
       {!! Form::submit('Delete ?', ['class' => 'btn btn-danger']) !!}
       </div>
       {!! Form::close() !!}
       </td>
-      
+
       @endif
     </tr>
     @endforeach

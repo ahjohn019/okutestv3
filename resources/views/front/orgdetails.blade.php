@@ -17,7 +17,10 @@
                 <p><strong>Region: </strong>{{$organizations->region}}</p>
                 <p><strong>Phone Number: </strong>{{$organizations->phone_no}}</p>
                 <p><strong>Register Date: </strong>{{$organizations->reg_date}}</p>
-
+                <p><strong>Artist List:</strong>
+                 @foreach ($organizations->artist as $artist)
+                 <span class="label label-info"><a href="{{url('artist/details',[$artist->id])}}">{{$artist->Name}}</a></span>
+                @endforeach</p>
         </div><!-- end col-md 8 -->
 </div><!-- end of row -->
     <div class="spacer"></div>

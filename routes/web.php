@@ -15,15 +15,14 @@
 /*Route::get('/', function () {
     return view('marketmenu');
 });*/
-
-//Route to payment page
-Route::get('/payment', function () {
-    return view('payment');
-});
+//payment
+Route::get('/payment',
+['uses'=>'PaymentController@getPayment',
+'as'=>'front.payment']);
 
 //usertype
 Route::prefix('usertype')->group(function(){
-   
+
     Route::get('/','UserTypeController@index')->name('usertype.dashboard');
     Route::get('/create', 'UserTypeController@create')->name('usertype.create');
     Route::post('/create', 'UserTypeController@store')->name('usertype.store');
@@ -31,7 +30,7 @@ Route::prefix('usertype')->group(function(){
     Route::get('/edit/{id}', 'UserTypeController@edit')->name('usertype.edit');
     Route::put('/edit/{id}', 'UserTypeController@update')->name('usertype.update');
     Route::delete('/delete/{id}', 'UserTypeController@destroy')->name('usertype.delete');
-    
+
 });
 
 //staff
@@ -71,6 +70,20 @@ Route::get('/market','OrgMarketController@index')->name('front.orgmarket');
 Route::get('/details/{id}','OrgMarketController@show')->name('front.orgdetails');
 });
 
+//Artist CRUD
+Route::prefix('artist')->group(function(){
+Route::get('/','ArtistController@getArtist')->name('artist.dashboard');
+   Route::get('/create','ArtistController@createArtist')->name('artist.create');
+   Route::post('/create','ArtistController@store')->name('artist.create.submit');
+   Route::get('/show/{id}','ArtistController@show')->name('artist.show');
+   Route::get('/edit/{id}','ArtistController@edit')->name('artist.edit');
+   Route::put('/edit/{id}','ArtistController@update')->name('artist.update');
+   Route::delete('/delete/{id}','ArtistController@destroy')->name('artist.delete');
+
+   //Show organization of artist
+   Route::get('/market','ArtistController@index')->name('front.artist');
+   Route::get('/details/{id}','ArtistController@show1')->name('front.artistdetails');
+});
 //Handicraft CRUD
 Route::prefix('handicraft')->group(function(){
    Route::get('/','HandicraftController@index')->name('hand.dashboard');
@@ -95,7 +108,7 @@ Route::prefix('service')->group(function(){
 
 //Event CRUD
 Route::prefix('event')->group(function(){
-    
+
     Route::get('/','EventController@index')->name('event.dashboard');
     Route::get('/create','EventController@createEvent')->name('event.create');
     Route::post('/create','EventController@store')->name('event.create.submit');
@@ -103,7 +116,7 @@ Route::prefix('event')->group(function(){
     Route::get('/edit/{id}','EventController@edit')->name('event.edit');
     Route::put('/edit/{id}','EventController@update')->name('event.update');
     Route::delete('/delete/{id}','EventController@destroy')->name('event.delete');
-    
+
 });
 
 //Feedback CRUD
@@ -119,9 +132,9 @@ Route::prefix('feedback')->group(function(){
 
 //main
 Route::get('/','FrontController@index');
-Route::get('/product',
-['uses'=>'HandicraftController@getHandicraft',
-'as'=>'front.product']);
+//Route::get('/product',
+//['uses'=>'HandicraftController@getHandicraft',
+//'as'=>'front.product']);
 
 //addcart
 Route::get('/add-to-cart/{id}',[
@@ -161,17 +174,17 @@ Route::group(['prefix' => 'user'], function(){
         'uses' => 'UserController@postSignup',
         'as' => 'user.signup'
     ]);
-    
+
     //register->signin
     Route::get('/signin',[
         'uses'=>'UserController@getSignin',
         'as' => 'user.signin'
-        
+
     ]);
     Route::post('/signin',[
         'uses' => 'UserController@postSignin',
         'as' => 'user.signin'
-        
+
     ]);
 });
 Route::group(['middleware'=>'auth'],function(){
@@ -183,9 +196,9 @@ Route::group(['middleware'=>'auth'],function(){
   //logout
     Route::get('/logout',[
         'uses' => 'Auth\LoginController@userLogout',
-        'as' => 'user.ulogout'  
+        'as' => 'user.ulogout'
     ]);
-    });    
+    });
 });
 
 
@@ -193,4 +206,77 @@ Route::group(['middleware'=>'auth'],function(){
 Route::get('/testdb', 'TestDBController@index');
 Auth::routes();
 
+//resources routes
+Route::resource('store','StoreController');
 
+Route::resource('product','ProductController');
+
+Route::resource('cartItem','CartItemController');
+
+//Route::resource('cartItem','PaymentController');
+
+Route::get('/store/{id?}/addnewproduct',['as'=>'store.addNewProduct', 'uses'=>'StoreController@addNewProduct']);
+
+Route::get('/store/{id?}/addnewservice',['as'=>'store.addNewService', 'uses'=>'StoreController@addNewService']);
+
+Route::get('/store/{id?}/addnewevent',['as'=>'store.addNewEvent', 'uses'=>'StoreController@addNewEvent']);
+
+Route::get('/org/{id?}/addnewstore',['as' => 'organization.addNewStore','uses'=> 'OrgController@addNewStore']);
+
+Route::post('/searchProduct','ProductController@searchProduct');
+
+Route::put('/addtocart/{id?}',['as' => 'product.addToCart','uses'=> 'ProductController@addToCart']);
+
+
+
+//Route to request page
+Route::get('/request', function () {
+    return view('payment.request');
+});
+
+//Route to response page
+Route::get('/response', function () {
+    return view('payment.response');
+});
+
+//Route to requery page
+Route::get('/requery', function () {
+    return view('payment.requery');
+});
+
+Route::get('/ipay88', function () {
+    return view('payment.Ipay88');
+});
+
+Route::get('/getProductDetails', function () {
+    return view('front.payment');
+});
+
+/*Route::get('/fakepaymentresponse', function () {
+    return view('payment.fakepaymentresponse');
+});*/
+
+/*Route::get('/entry', function () {
+    return view('https://www.mobile88.com/epayment/entry.asp');
+});*/
+
+Route::get('/fakepaymentresponse','PaymentController@getUserInput');
+
+Route::get('/fakepaymentresponse','PaymentController@getPaymentDetails');
+
+Route::get('/getProductDetails','PaymentController@getProductDetails');
+
+Route::post('/response','PaymentController@getMerchantDetails');
+
+Route::get('/fakepaymentresponse',
+['uses'=>'PaymentController@getPaymentResponse',
+'as'=>'front.fakepaymentresponse']);
+
+Route::get('/fakepaymentresponse',
+['uses'=>'PaymentController@getPaymentDetails',
+'as'=>'front.fakepaymentresponse']);
+
+Route::get('/getProductDetails',
+['uses'=>'PaymentController@getProductDetails',
+'as'=>'front.payment']);
+//Route::post('/entry', 'PaymentController@postPaymentDetails');
